@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #191b2a;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #6d83b9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        pre {
+            background-color: #191b2a;
+            color: azure;
+            padding: 15px;
+            border-radius: 5px;
+            border-radius: 8px;
+            border: 1px solid black;
+            white-space: pre-wrap;
+
+        }
+
+        code {
+            font-family: "Courier New", Courier, monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Dictionary API Demo</h1>
+
+        <div class="section">
+            <h2>Section 1: Fetch 30 Random Words</h2>
+            <button onclick="fetchRandom30()">Get 30 Random Words</button>
+            <pre id="random30Output"></pre>
+        </div>
+
+        <div class="section">
+            <h2>Section 2: Fetch a Single Random Word</h2>
+            <button onclick="fetchRandom()">Get a Random Word</button>
+            <pre id="randomOutput"></pre>
+        </div>
+
+        <div class="section">
+            <h2>Section 3: Find Meaning of a Word</h2>
+            <p>Use the input field to post a word and get its meaning:</p>
+
+            <input type="text" id="wordInput" placeholder="Enter a word" style="padding: 10px; margin-right: 10px; background-color: #191b2a;   border-radius: 8px;
+            border: 1px solid black;">
+            <button onclick="postWord()">Get Word Meaning</button>
+            <pre id="postOutput"></pre>
+
+            <h3>Example POST request in JavaScript:</h3>
+            <pre>
+<code>
+const word = 'example';
+fetch('http://localhost:3000/post', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ word })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+</code>
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        async function fetchRandom30() {
+            const response = await fetch('/random-30');
+            const data = await response.json();
+            document.getElementById('random30Output').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function fetchRandom() {
+            const response = await fetch('/random');
+            const data = await response.json();
+            document.getElementById('randomOutput').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function postWord() {
+            const word = document.getElementById('wordInput').value;
+            const response = await fetch('/post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ word })
+            });
+            const data = await response.json();
+            document.getElementById('postOutput').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+
+</html>
